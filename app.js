@@ -1,11 +1,63 @@
 const express = require("express")
 const app = express();
+const mongoose = require("mongoose")
 app.use(express.json());
 const Port = 4500 ; 
+const DB_link =  "mongodb+srv://fawazeer:Fawazeer0505@fawazeer.piglvtl.mongodb.net/?retryWrites=true&w=majority&appName=Fawazeer"
+mongoose.connect(DB_link)
+.then(() => {console.log("Connected To DB")})
+.catch((error) => {console.log("This an Error" + error)})
 
-app.get("/:Code" , (Req , Res) =>{
-    let Code = Req.params.Code
-    
+//API
+
+const Users = require("./DB/Users")
+const Question = require("./DB/Question")
+//Add Users
+
+app.post("/Users/:pass" , async(Req , Res) =>{
+if(Req.params.pass == "20212223"){
+const newUser = new Users()
+let Code = Req.body._id
+let Name = Req.body.Name
+let Answer = Req.body.Answer
+let Status = Req.body.Status
+let LoginTime = Req.body.LoginTime
+let LogoutTime = Req.body.LogoutTime
+
+newUser._id = Code
+newUser.Name = Name
+newUser.Answer = Answer
+newUser.Status = Status
+newUser.LoginTime = LoginTime
+newUser.LogoutTime = LogoutTime
+await newUser.save()
+Res.send("The data Saved")
+}else{
+    Res.send("The Password is Wrong!")
+}
+})
+
+//Editing Users
+
+app.put("/Login" , async(Req , Res) =>{
+const Code = Req.body.Code
+let Quesfind = await Question.find()
+let Data = await Users.findById(Code)
+await Users.findByIdAndUpdate(Code , {
+    Status : true ,
+   LoginTime : Req.body.LoginTime 
+});
+Res.json( [Data , Quesfind])
+})
+
+
+app.put("/Logout" , async (Req , Res) => {
+    const Code = Req.body.Code
+    await Users.findByIdAndUpdate(Code , {
+        Answer : Req.body.Answer , 
+       LogoutTime : Req.body.LoginTime 
+    });
+    Res.send("Okay")
 })
 
 
@@ -13,14 +65,66 @@ app.get("/:Code" , (Req , Res) =>{
 
 
 
+//Q&A
+app.post("/Ques/:pass" , async(Req , Res) =>{
+    if(Req.params.pass == "20212223"){
+    const newQues = new Question()
+    let Quest = Req.body.Ques
+    let A = Req.body.A
+    let B = Req.body.B
+    let C = Req.body.C
+    let D = Req.body.D
+    let F = Req.body.F
+    let True = Req.body.True
+    newQues._id = 1
+    newQues.Ques = Quest
+    newQues.A = A
+    newQues.B = B
+    newQues.C = C
+    newQues.D = D
+    newQues.F = F
+    newQues.True = True
+
+    await newQues.save()
+    Res.send("The Question Saved")
+    }else{
+        Res.send("The Password is Wrong!")
+    }
+    })
+
+// Reset
+app.delete("/reset" , async (Req , Res) =>{
+await Question.findByIdAndDelete(1)
+let Alluser = await Users.find()
+let Code = "";
+for (user of Alluser){
+    Code = user._id;
+    await  Users.findByIdAndUpdate(Code , {
+    Answer : "" ,
+    Status : false,
+    LoginTime : null ,
+    LogoutTime : null
+    })
+}
+Res.send("Deleted Successfully")
+})
+
+//Result
 
 
-
-
-
-
-
-
+app.get("/Result" , async (Req , Res) =>{
+let Winners = [] 
+let Losers = []
+let Allusers = await Users.find()
+let Quesfind = await Question.findById(1)
+let Code = "";
+for(user of Allusers){   
+Code = user._id
+if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime])}
+else{Losers.push([user.Name , user.LogoutTime])}
+}
+Res.json({Winners , Losers})
+})
 
 
 
