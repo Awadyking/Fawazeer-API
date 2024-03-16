@@ -1,6 +1,8 @@
 const express = require("express")
+const cors = require("cors
 const app = express();
 const mongoose = require("mongoose")
+app.use(cors());
 app.use(express.json());
 const Port = 4500 ; 
 const DB_link =  "mongodb+srv://fawazeer:Fawazeer0505@fawazeer.piglvtl.mongodb.net/?retryWrites=true&w=majority&appName=Fawazeer"
