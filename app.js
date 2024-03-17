@@ -7,7 +7,7 @@ app.use(express.json());
 const Port = 4500 ; 
 const DB_link =  "mongodb+srv://fawazeer:Fawazeer0505@fawazeer.piglvtl.mongodb.net/?retryWrites=true&w=majority&appName=Fawazeer"
 mongoose.connect(DB_link)
-.then(() => {console.log("Connected To DB")})
+.then(() => {console.log("Data Base Connected")})
 .catch((error) => {console.log("This an Error" + error)})
 
 //API
@@ -46,7 +46,7 @@ const Code = Req.body.Code
 let Quesfind = await Question.find()
 let Data = await Users.findById(Code)
 await Users.findByIdAndUpdate(Code , {
-    Status : true ,
+    Status : Req.body.Status ,
    LoginTime : Req.body.LoginTime 
 });
 Res.json( [Data , Quesfind])
@@ -128,6 +128,13 @@ else{Losers.push([user.Name , user.LogoutTime])}
 Res.json({Winners , Losers})
 })
 
+
+
+app.get("/Ques" , async(Req , Res) => {
+ Quesfind = await Question.findById(1)
+Res.json(Quesfind.Ques)
+
+})
 
 
 
