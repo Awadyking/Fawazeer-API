@@ -57,7 +57,7 @@ app.put("/Logout" , async (Req , Res) => {
     const Code = Req.body.Code
     await Users.findByIdAndUpdate(Code , {
         Answer : Req.body.Answer , 
-       LogoutTime : Req.body.LoginTime 
+       LogoutTime : Req.body.LogoutTime 
     });
     Res.send("Okay")
 })
