@@ -43,7 +43,7 @@ Res.send("The data Saved")
 
 app.put("/Login" , async(Req , Res) =>{
 const Code = Req.body.Code
-let Quesfind = await Question.find()
+let Quesfind = await Question.findById(1)
 let Data = await Users.findById(Code)
 await Users.findByIdAndUpdate(Code , {
     Status : Req.body.Status ,
@@ -78,7 +78,7 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     let D = Req.body.D
     let F = Req.body.F
     let True = Req.body.True
-    newQues._id = 1
+    newQues._id = 2
     newQues.Ques = Quest
     newQues.A = A
     newQues.B = B
@@ -131,8 +131,14 @@ Res.json({Winners , Losers})
 
 
 app.get("/Ques" , async(Req , Res) => {
- Quesfind = await Question.findById(1)
-Res.json(Quesfind.Ques)
+ Quesfind = await Question.find()
+ let QuesArr = []
+for(Quest of Quesfind){
+    QuesArr.push(Quest.Ques)
+}
+
+
+Res.json(QuesArr)
 
 })
 
