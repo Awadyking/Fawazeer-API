@@ -151,7 +151,7 @@ app.get("/Users" , async(Req , Res) => {
 app.delete("/Users" , async (Req , Res)=>{
 let Code = Req.body.Code
 await Users.findByIdAndDelete(Code)
-Res.send(Code + "is Deleted Successfully")
+Res.send(Deleted Successfully")
 })
 
 
