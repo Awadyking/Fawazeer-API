@@ -142,6 +142,20 @@ Res.json(QuesArr)
 
 })
 
+app.get("/Users" , async(Req , Res) => {
+    let Allusers = await Users.find()
+    Res.json(Allusers)
+})
+
+
+app.delete("/Users" , async (Req , Res)=>{
+let Code = Req.Code
+await Users.findByIdAndDelete(Code)
+Res.send(Code + "is Deleted Successfully")
+})
+
+
+
 
 
 app.listen(Port , () =>{
