@@ -123,7 +123,7 @@ let Code = "";
 for(user of Allusers){   
 Code = user._id
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime])}
-else{Losers.push([user.Name , user.LogoutTime])}
+else{Losers.push([user.Name , user.LogoutTime , user.LoginTime])}
 }
 Res.json({Winners , Losers})
 })
