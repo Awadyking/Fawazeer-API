@@ -150,8 +150,11 @@ app.get("/Users" , async(Req , Res) => {
 
 app.delete("/Users" , async (Req , Res)=>{
 let Code = Req.body.Code
-await Users.findByIdAndDelete(Code)
-Res.send(Deleted Successfully")
+let Allusers = await Users.find()
+for(user of Allusers){
+if(user._id == Code){await Users.findByIdAndDelete(Code)}
+}
+Res.send(Code + " is Deleted")
 })
 
 
