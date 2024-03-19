@@ -148,7 +148,7 @@ app.get("/Users" , async(Req , Res) => {
 })
 
 
-app.delete("/Users" , async (Req , Res)=>{
+app.put("/DelUsers/" , async (Req , Res)=>{
 let Code = Req.body.Code
 let Allusers = await Users.find()
 for(user of Allusers){
