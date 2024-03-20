@@ -66,6 +66,16 @@ app.put("/Logout" , async (Req , Res) => {
 
 
 
+ async function Timed(){
+    let Datenow = Math.trunc( new Date().getTime() / 1000)
+    let QuesFind = await Question.findById(1)
+    let newQues = new Question()
+if(QuesFind.Timer >= Datenow){newQues._id = 3}
+}
+
+
+
+
 
 //Q&A
 app.post("/Ques/:pass" , async(Req , Res) =>{
@@ -92,6 +102,7 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Timer = Timer
     await newQues.save()
     Res.send("The Question Saved")
+    setInterval(()=>{Timed()},1000)
     }else{
         Res.send("The Password is Wrong!")
     }
@@ -167,19 +178,6 @@ if(user._id == Code){await Users.findByIdAndDelete(Code)}
 }
 Res.send(Code + " is Deleted")
 })
-
-
-app.post("/Timed" , async (Req , Res) =>{
-    let Datenow = Math.trunc( new Date().getTime() / 1000)
-    let QuesFind = await Question.findById(1)
-    let newQues = new Question()
-if(QuesFind == Datenow){newQues._id = 3}
-
-Res.send("عذرا ! لقد انتهى الوقت المخصص للسؤال")
-
-})
-
-
 
 
 
