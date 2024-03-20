@@ -8,7 +8,10 @@ let Ques = new Schema({
     C : String ,
     D : String ,
     F : String , 
-    True : String 
+    True : String ,
+    Type: String ,
+    Winner: String,
+    Timer: Date,
 })
 
 const Question = mongoose.model("Question" , Ques)

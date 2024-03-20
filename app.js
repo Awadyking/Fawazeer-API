@@ -78,6 +78,8 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     let D = Req.body.D
     let F = Req.body.F
     let True = Req.body.True
+    let Type = Req.body.Type
+    let Timer = Req.body.Timer
     newQues._id = 1
     newQues.Ques = Quest
     newQues.A = A
@@ -86,7 +88,8 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.D = D
     newQues.F = F
     newQues.True = True
-
+    newQues.Type = Type
+    newQues.Timer = Timer
     await newQues.save()
     Res.send("The Question Saved")
     }else{
@@ -97,6 +100,14 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
 // Reset
 app.delete("/reset" , async (Req , Res) =>{
 await Question.findByIdAndDelete(1)
+Quesfind = await Question.find()
+let QuesArr = []
+for(Quest of Quesfind){
+   QuesArr.push(Quest.Ques)
+}
+if(QuesArr.length > 2){
+await Question.findByIdAndDelete(3)
+}
 let Alluser = await Users.find()
 let Code = "";
 for (user of Alluser){
@@ -156,6 +167,19 @@ if(user._id == Code){await Users.findByIdAndDelete(Code)}
 }
 Res.send(Code + " is Deleted")
 })
+
+
+app.post("/Timed" , async (Req , Res) =>{
+    let Datenow = Math.trunc( new Date().getTime() / 1000)
+    let QuesFind = await Question.findById(1)
+    let newQues = new Question()
+if(QuesFind == Datenow){newQues._id = 3}
+
+Res.send("عذرا ! لقد انتهى الوقت المخصص للسؤال")
+
+})
+
+
 
 
 
