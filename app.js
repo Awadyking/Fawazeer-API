@@ -25,7 +25,6 @@ let Answer = Req.body.Answer
 let Status = Req.body.Status
 let LoginTime = Req.body.LoginTime
 let LogoutTime = Req.body.LogoutTime
-let Type = Req.body.Type
 
 newUser._id = Code
 newUser.Name = Name
@@ -54,7 +53,7 @@ Res.json( [Data , Quesfind])
 })
 
 
-app.get("/User" , async(Req ,Res) =>{
+app.get("/UType" , async(Req ,Res) =>{
 Code = Req.body.Code
 let User = await Users.findById(Code)
 Res.json(User.Type)
