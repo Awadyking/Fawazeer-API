@@ -53,7 +53,7 @@ Res.json( [Data , Quesfind])
 })
 
 
-app.get("/UType" , async(Req ,Res) =>{
+app.put("/UType/" , async(Req ,Res) =>{
 Code = Req.body.Code
 let User = await Users.findById(Code)
 Res.json(User.Type)
