@@ -11,7 +11,7 @@ let Ques = new Schema({
     True : String ,
     Type: String ,
     Winner: String,
-    Timer: Date,
+    Timer: Number,
 })
 
 const Question = mongoose.model("Question" , Ques)
