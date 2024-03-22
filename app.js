@@ -74,13 +74,9 @@ app.put("/Logout" , async (Req , Res) => {
 
 
  async function Timed(){
-    let Datenow = Math.trunc( new Date().getTime() / 1000)
-    let QuesFind = await Question.findById(1)
-    let newQues = new Question()
-if(QuesFind.Timer >= Datenow){newQues._id = 3}
+
+    
 }
-
-
 
 
 
@@ -108,8 +104,20 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Type = Type
     newQues.Timer = Timer
     await newQues.save()
+    let Datenow = Math.trunc( new Date().getTime() / 1000)
+    let newQues3 = new Question()
+    let QuesFind = await Question.findById(1)
+    let nextTime = Datenow + QuesFind.Timer
+    setInterval(()=>{
+    Datenow = Math.trunc( new Date().getTime() / 1000) ;
+    if(Datenow == nextTime){
+        newQues3._id = 3;
+        newQues.Ques = "Timeout"
+         newQues3.save()}
+
+},1000)
     Res.send("The Question Saved")
-    setInterval(()=>{Timed()},1000)
+    
     }else{
         Res.send("The Password is Wrong!")
     }
@@ -117,15 +125,16 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
 
 // Reset
 app.delete("/reset" , async (Req , Res) =>{
-await Question.findByIdAndDelete(1)
 Quesfind = await Question.find()
 let QuesArr = []
 for(Quest of Quesfind){
-   QuesArr.push(Quest.Ques)
+   QuesArr.push(Quest._id)
 }
 if(QuesArr.length > 2){
 await Question.findByIdAndDelete(3)
 }
+await Question.findByIdAndDelete(1)
+
 let Alluser = await Users.find()
 let Code = "";
 for (user of Alluser){
