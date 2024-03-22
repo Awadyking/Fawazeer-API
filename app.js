@@ -25,6 +25,7 @@ let Answer = Req.body.Answer
 let Status = Req.body.Status
 let LoginTime = Req.body.LoginTime
 let LogoutTime = Req.body.LogoutTime
+let Type = Req.body.Type
 
 newUser._id = Code
 newUser.Name = Name
@@ -32,6 +33,7 @@ newUser.Answer = Answer
 newUser.Status = Status
 newUser.LoginTime = LoginTime
 newUser.LogoutTime = LogoutTime
+newUser.Type = Type
 await newUser.save()
 Res.send("The data Saved")
 }else{
@@ -69,14 +71,6 @@ app.put("/Logout" , async (Req , Res) => {
     Res.send("Okay")
 })
 
-
-
-
-
- async function Timed(){
-
-    
-}
 
 
 
