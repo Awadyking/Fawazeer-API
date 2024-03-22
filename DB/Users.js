@@ -8,7 +8,7 @@ let User = new Schema({
     LoginTime : Date ,
     LogoutTime : Date ,
     Type : String,
-    textCorrect : Boolean
+    textCorrect : String
 })
 
 const Users = mongoose.model("Users" , User)
