@@ -58,11 +58,18 @@ Res.json( [Data , Quesfind])
 
 
 app.put("/UType/" , async(Req ,Res) =>{
-Code = Req.body.Code
-let User = await Users.findById(Code)
-Res.json(User.Type)
-})
+    let All = await Users.find()
+    let Code
+    let User
+for(user of All){
+    Code = Req.body.Code
+    if(Code == user._id){
+    User = await Users.findById(Code)
+    Res.json(User.Type)
+    }
+}
 
+})
 
 app.put("/Logout" , async (Req , Res) => {
     const Code = Req.body.Code
@@ -100,18 +107,37 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Type = Type
     newQues.Timer = Timer
     await newQues.save()
+async function timed(){
     let Datenow = Math.trunc( new Date().getTime() / 1000)
     let newQues3 = new Question()
     let QuesFind = await Question.findById(1)
     let nextTime = Datenow + QuesFind.Timer
+    let Winners = [] ;
+    let All;
     setInterval(()=>{
     Datenow = Math.trunc( new Date().getTime() / 1000) ;
-    if(Datenow == nextTime){
+   if(Datenow == nextTime){
+
+  async function Go(){
+    All = await  Users.find()
         newQues3._id = 3;
-        newQues.Ques = "Timeout"
-         newQues3.save()}
+        newQues3.Ques = "Timeout"
+         for(user of All){
+          if(user.Answer == QuesFind.True){Winners.push(user.Name)}
+}
+        let i = Math.floor(Math.random() * Winners.length)
+        if(Winners.length == 0){newQues3.Winner = ""}
+        else{newQues3.Winner = Winners[i]}
+        newQues3.save()
+        
+  }
+  Go()
+        }
+
 
 },1000)
+}
+timed()
     Res.send("The Question Saved")
     
     }else{
