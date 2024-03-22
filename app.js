@@ -27,6 +27,8 @@ let LoginTime = Req.body.LoginTime
 let LogoutTime = Req.body.LogoutTime
 let Type = Req.body.Type
 
+console.log(Type + Answer)
+
 newUser._id = Code
 newUser.Name = Name
 newUser.Answer = Answer
