@@ -200,8 +200,8 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
     if(ShowTrue == true){
         if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime) , user.Answer])}
         else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
-    }
-}else{Winners.push("UnderCorrect")}
+    }else{Winners.push("UnderCorrect")}
+}
 
 Wins= QuesWin.Winner
 }
@@ -251,8 +251,8 @@ app.put("/Correct" , async (Req , Res) =>{
     let Allusers = await Users.find()
     let Winners = [];
     for(user of Allusers){
-        if(user._id == Data[0]){await Users.findByIdAndUpdate(Code , {textCorrect : Data[1]})}
-if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
+    if(user._id == Data[0]){await Users.findByIdAndUpdate(Code , {textCorrect : Data[1]})}
+    if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
     }
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
