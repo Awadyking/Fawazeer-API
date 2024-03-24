@@ -194,12 +194,12 @@ let Type = Quesfind.Type
 let Wins ;
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
-if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime])}
+if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
 }if(Quesfind.Type == "Text"){
     if(ShowTrue == true){
-        if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
-        else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
+        if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime) , user.Answer])}
+        else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
     }
 }
 
