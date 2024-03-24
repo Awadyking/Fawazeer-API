@@ -36,6 +36,7 @@ newUser.Status = Status
 newUser.LoginTime = LoginTime
 newUser.LogoutTime = LogoutTime
 newUser.Type = Type
+
 await newUser.save()
 Res.send("The data Saved")
 }else{
@@ -201,9 +202,9 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
     }
 }
 
-
+let Wins = QuesWin.Winner
 }
-Res.json({Winners , Lossers , QuesWin , TrueAnswerShow , Type})
+Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 })
 
 
@@ -214,6 +215,9 @@ app.get("/Ques" , async(Req , Res) => {
 for(Quest of Quesfind){
     QuesArr.push(Quest.Ques)
 }
+
+
+
 
 
 Res.json(QuesArr)
