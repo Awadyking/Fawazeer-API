@@ -189,20 +189,21 @@ let Allusers = await Users.find()
 let Quesfind = await Question.findById(1)
 let QuesWin = await Question.findById(3)
 let TrueAnswerShow = Quesfind.TrueAnswerShow
+let Type = Quesfind.Type
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime])}
 else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
 }if(Quesfind.Type == "Text"){
-        if(ShowTrue == true){
-            if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
-            else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
-        }
+    if(ShowTrue == true){
+        if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
+        else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
+    }
 }
 
 
 }
-Res.json({Winners , Lossers , QuesWin , TrueAnswerShow})
+Res.json({Winners , Lossers , QuesWin , TrueAnswerShow , Type})
 })
 
 
