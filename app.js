@@ -200,7 +200,7 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
     if(ShowTrue == true){
         if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime) , user.Answer])}
         else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
-    }else{Type = "UnderCorrect"}
+    }else{Winners = ["UnderCorrect"]}
 }
 
 Wins= QuesWin.Winner
