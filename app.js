@@ -188,7 +188,7 @@ let Lossers = []
 let Allusers = await Users.find()
 let Quesfind = await Question.findById(1)
 let QuesWin = await Question.findById(3)
-let TrueAnswerShow = await Question.findById(1).TrueAnswerShow
+let TrueAnswerShow = Quesfind.TrueAnswerShow
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime])}
@@ -201,9 +201,8 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime])}
 }
 
 
-
-Res.json({Winners , Lossers , QuesWin , TrueAnswerShow})
 }
+Res.json({Winners , Lossers , QuesWin , TrueAnswerShow})
 })
 
 
