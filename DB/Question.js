@@ -10,8 +10,10 @@ let Ques = new Schema({
     F : String , 
     True : String ,
     Type: String ,
-    Winner: String,
+    Winner: Array,
     Timer: Number,
+    ShowTrue :Boolean,
+    TrueAnswerShow : String 
 })
 
 const Question = mongoose.model("Question" , Ques)
