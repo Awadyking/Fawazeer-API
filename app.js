@@ -131,7 +131,7 @@ async function timed(){
         newQues3.Ques = "Timeout"
          for(user of All){
         if(QuesType == "Choose"){
-        if(user.Answer == QuesFind.True){Winners.push([user.Name ,String(user.LogoutTime)])}
+        if(user.Answer == QuesFind.True){Winners.push([user.Name ,String(user.LogoutTime) , user.Answer])}
 }
 }
         let i = Math.floor(Math.random() * Winners.length)
