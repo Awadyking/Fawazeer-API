@@ -131,7 +131,7 @@ async function timed(){
         newQues3.Ques = "Timeout"
          for(user of All){
         if(QuesType == "Choose"){
-        if(user.Answer == QuesFind.True){Winners.push([user.Name ,String(user.LogoutTime) , user.Answer])}
+        if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 }
 }
         let i = Math.floor(Math.random() * Winners.length)
@@ -198,7 +198,7 @@ if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime , use
 else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
 }if(Quesfind.Type == "Text"){
     if(ShowTrue == true){
-        if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime) , user.Answer])}
+        if(user.textCorrect == "T"){Winners.push([user.Name , user.LogoutTime , user.Answer])}
         else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
     }else{Winners.push("UnderCorrect")}
 }
