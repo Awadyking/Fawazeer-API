@@ -256,10 +256,14 @@ app.put("/Correct" , async (Req , Res) =>{
     if(user._id == Data[0]){await Users.findByIdAndUpdate(Code , {textCorrect : Data[1]})}
     if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
     }
+
+    if(Winners.length != 1){
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
         else{await Question.findByIdAndUpdate(3 , {Winner : Winners[i]})}
-    
+    }else{newQues3.Winner = Winners[0]}
+
+      
         await Question.findByIdAndUpdate(1 , {ShowTrue : true})
 
         Res.send("All is Corrected")
