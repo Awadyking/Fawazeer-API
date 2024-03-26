@@ -192,6 +192,7 @@ let QuesWin = await Question.findById(3)
 let TrueAnswerShow = Quesfind.TrueAnswerShow
 let Type = Quesfind.Type
 let Wins ;
+let ShowTrue = Quesfind.ShowTrue
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
