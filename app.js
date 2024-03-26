@@ -134,11 +134,12 @@ async function timed(){
         if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 }
 }
+if(Winners.length != 1){
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
         else{newQues3.Winner = Winners[i]}
         newQues3.save()
-        
+    }else{newQues3.Winner = Winners[0]}
   }
   Go()
 }
