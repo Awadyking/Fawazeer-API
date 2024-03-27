@@ -198,6 +198,7 @@ for(user of Allusers){
 if(Quesfind.Type == "Choose"){
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
+
 }if(Quesfind.Type == "Text"){
     if(ShowTrue == true){
         if(user.textCorrect == "T"){Winners.push([user.Name , user.LogoutTime , user.Answer])}
@@ -251,22 +252,28 @@ Res.send(Code + " is Deleted")
 app.put("/Correct" , async (Req , Res) =>{
     let Data = Req.body.Data
     let Allusers = await Users.find()
+    let newQues3 = new Question()
     let Winners = [];
-    let Lossers = [];
-    for(user of Allusers){
-    if(user._id == Data[0]){await Users.findByIdAndUpdate(Code , {textCorrect : Data[1]})}
-    if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
-    if(user.textCorrect == "F"){Lossers.push([user.Name , String(user.LogoutTime)])}
-    }
+    let i = 0
+    let x;
+for(user of Allusers){
+if(Data[i].length > 1 ){
+   if(Data[i][1] == "T"){
+    x =await Users.findById(Data[i][0])
+    Winners.push([x.Name , x.LogoutTime, x.Answer])
+   }
+}
+i++;
+}
 
     if(Winners.length != 1){
-        let i = Math.floor(Math.random() * Winners.length)
+        let c = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
-        else{await Question.findByIdAndUpdate(3 , {Winner : Winners[i]})}
+        else{await Question.findByIdAndUpdate(3 , {Winner : Winners[c]})}
     }else{newQues3.Winner = Winners[0]}
 
       
-        await Question.findByIdAndUpdate(1 , {ShowTrue : true})
+     await Question.findByIdAndUpdate(1 , {ShowTrue : true})
 
         Res.send("All is Corrected")
 })
