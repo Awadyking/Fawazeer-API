@@ -252,9 +252,11 @@ app.put("/Correct" , async (Req , Res) =>{
     let Data = Req.body.Data
     let Allusers = await Users.find()
     let Winners = [];
+    let Lossers = [];
     for(user of Allusers){
     if(user._id == Data[0]){await Users.findByIdAndUpdate(Code , {textCorrect : Data[1]})}
     if(user.textCorrect == "T"){Winners.push([user.Name , String(user.LogoutTime)])}
+    if(user.textCorrect == "F"){Lossers.push([user.Name , String(user.LogoutTime)])}
     }
 
     if(Winners.length != 1){
