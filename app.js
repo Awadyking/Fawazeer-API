@@ -202,7 +202,6 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
 
 }if(Quesfind.Type == "Text"){
     if(ShowTrue == true){
-        console.log(user)
         if(user.textCorrect == "T"){Winners.push([user.Name , user.LogoutTime , user.Answer]) ;}
         else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
     }else{Winners.push("UnderCorrect")}
