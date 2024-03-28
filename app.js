@@ -175,7 +175,8 @@ for (user of Alluser){
     Answer : "" ,
     Status : false,
     LoginTime : null ,
-    LogoutTime : null
+    LogoutTime : null,
+    textCorrect: "",
     })
 }
 Res.send("Deleted Successfully")
