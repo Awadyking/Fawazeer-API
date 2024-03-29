@@ -134,7 +134,7 @@ async function timed(){
         if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 }
 }
-if(Winners.length != 1){
+if(Winners.length > 1){
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
         else{newQues3.Winner = Winners[i]}
@@ -188,12 +188,20 @@ Res.send("Deleted Successfully")
 app.get("/Result" , async (Req , Res) =>{
 let Winners = [] 
 let Lossers = []
+let Wins ;
+let QuesAll = await Question.find()
+let Type;
+let TrueAnswerShow;
+if(QuesAll.length == 1){
+    TrueAnswerShow = ""
+    Type = ""
+}
+else{
 let Allusers = await Users.find()
 let Quesfind = await Question.findById(1)
 let QuesWin = await Question.findById(3)
-let TrueAnswerShow = Quesfind.TrueAnswerShow
-let Type = Quesfind.Type
-let Wins ;
+TrueAnswerShow = Quesfind.TrueAnswerShow
+ Type = Quesfind.Type
 let ShowTrue = Quesfind.ShowTrue
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
@@ -207,10 +215,11 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
     }else{Winners.push("UnderCorrect")}
 }
 
-Wins= QuesWin.Winner
+
 }
+if(QuesAll.length == 3){Wins= QuesWin.Winner}
 
-
+}
 
 
 Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
@@ -221,15 +230,19 @@ Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 app.get("/Ques" , async(Req , Res) => {
  Quesfind = await Question.find()
  let QuesArr = []
+ let Time
 for(Quest of Quesfind){
     QuesArr.push(Quest.Ques)
 }
 
+if(QuesArr.length > 1){
+    Quesmain = await Question.findById(1)
+    Time = Quesmain.Timer
+}else{Time = null}
 
 
 
-
-Res.json(QuesArr)
+Res.json(QuesArr , Time)
 
 })
 
