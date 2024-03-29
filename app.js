@@ -10,12 +10,6 @@ mongoose.connect(DB_link)
 .then(() => {console.log("Data Base Connected")})
 .catch((error) => {console.log("This an Error" + error)})
 
-
-let Datenow = Math.trunc( new Date().getTime() / 1000)
-
-let nextTime ;
-
-
 //API
 
 const Users = require("./DB/Users")
@@ -119,42 +113,40 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.TrueAnswerShow = TrueAnswerShow
     await newQues.save()
 
-async function timed(nextTime , Datenow){
-    Datenow = Math.trunc( new Date().getTime() / 1000)
+async function timed(){
+    let Datenow = Math.trunc( new Date().getTime() / 1000)
     let newQues3 = new Question()
     let QuesFind = await Question.findById(1)
-     nextTime = Datenow + QuesFind.Timer
+    let nextTime = Datenow + QuesFind.Timer
     let QuesType = QuesFind.Type
     let Winners = [] ;
     let All;
     setInterval(()=>{
     Datenow = Math.trunc( new Date().getTime() / 1000) ;
-if(Datenow == nextTime){
-async function Go(){
+   if(Datenow == nextTime){
+
+  async function Go(){
     All = await  Users.find()
         newQues3._id = 3;
         newQues3.Ques = "Timeout"
-
          for(user of All){
         if(QuesType == "Choose"){
         if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
-}}
-
-
-if(Winners.length > 1){
+}
+}
+if(Winners.length != 1){
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
         else{newQues3.Winner = Winners[i]}
         newQues3.save()
     }else{newQues3.Winner = Winners[0]}
-}
-
+  }
   Go()
 }
 
+
 },1000)
 }
-
 timed()
     Res.send("The Question Saved")
     
@@ -196,20 +188,12 @@ Res.send("Deleted Successfully")
 app.get("/Result" , async (Req , Res) =>{
 let Winners = [] 
 let Lossers = []
-let Wins ;
-let QuesAll = await Question.find()
-let Type;
-let TrueAnswerShow;
-if(QuesAll.length == 1){
-    TrueAnswerShow = ""
-    Type = ""
-}
-else{
 let Allusers = await Users.find()
 let Quesfind = await Question.findById(1)
 let QuesWin = await Question.findById(3)
-TrueAnswerShow = Quesfind.TrueAnswerShow
- Type = Quesfind.Type
+let TrueAnswerShow = Quesfind.TrueAnswerShow
+let Type = Quesfind.Type
+let Wins ;
 let ShowTrue = Quesfind.ShowTrue
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
@@ -223,11 +207,10 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
     }else{Winners.push("UnderCorrect")}
 }
 
-
+Wins= QuesWin.Winner
 }
-if(QuesAll.length == 3){Wins= QuesWin.Winner}
 
-}
+
 
 
 Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
@@ -238,16 +221,15 @@ Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 app.get("/Ques" , async(Req , Res) => {
  Quesfind = await Question.find()
  let QuesArr = []
- let Time ;
-for(Quest of Quesfind){QuesArr.push(Quest.Ques)}
-
-if(QuesArr.length > 1){
-    Time = Datenow - nextTime
-}else{Time = null}
+for(Quest of Quesfind){
+    QuesArr.push(Quest.Ques)
+}
 
 
 
-Res.json({QuesArr , Time})
+
+
+Res.json(QuesArr)
 
 })
 
