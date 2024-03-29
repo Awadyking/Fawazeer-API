@@ -10,6 +10,12 @@ mongoose.connect(DB_link)
 .then(() => {console.log("Data Base Connected")})
 .catch((error) => {console.log("This an Error" + error)})
 
+
+let Datenow = Math.trunc( new Date().getTime() / 1000)
+
+let nextTime ;
+
+
 //API
 
 const Users = require("./DB/Users")
@@ -113,40 +119,42 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.TrueAnswerShow = TrueAnswerShow
     await newQues.save()
 
-async function timed(){
-    let Datenow = Math.trunc( new Date().getTime() / 1000)
+async function timed(nextTime , Datenow){
+    Datenow = Math.trunc( new Date().getTime() / 1000)
     let newQues3 = new Question()
     let QuesFind = await Question.findById(1)
-    let nextTime = Datenow + QuesFind.Timer
+     nextTime = Datenow + QuesFind.Timer
     let QuesType = QuesFind.Type
     let Winners = [] ;
     let All;
     setInterval(()=>{
     Datenow = Math.trunc( new Date().getTime() / 1000) ;
-   if(Datenow == nextTime){
-
-  async function Go(){
+if(Datenow == nextTime){
+async function Go(){
     All = await  Users.find()
         newQues3._id = 3;
         newQues3.Ques = "Timeout"
+
          for(user of All){
         if(QuesType == "Choose"){
         if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
-}
-}
+}}
+
+
 if(Winners.length > 1){
         let i = Math.floor(Math.random() * Winners.length)
         if(Winners.length == 0){newQues3.Winner = []}
         else{newQues3.Winner = Winners[i]}
         newQues3.save()
     }else{newQues3.Winner = Winners[0]}
-  }
+}
+
   Go()
 }
 
-
 },1000)
 }
+
 timed()
     Res.send("The Question Saved")
     
@@ -230,19 +238,16 @@ Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 app.get("/Ques" , async(Req , Res) => {
  Quesfind = await Question.find()
  let QuesArr = []
- let Time
-for(Quest of Quesfind){
-    QuesArr.push(Quest.Ques)
-}
+ let Time ;
+for(Quest of Quesfind){QuesArr.push(Quest.Ques)}
 
 if(QuesArr.length > 1){
-    Quesmain = await Question.findById(1)
-    Time = Quesmain.Timer
+    Time = Datenow - nextTime
 }else{Time = null}
 
 
 
-Res.json(QuesArr , Time)
+Res.json({QuesArr , Time})
 
 })
 
