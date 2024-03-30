@@ -12,8 +12,9 @@ let Ques = new Schema({
     Type: String ,
     Winner: Array,
     Timer: Number,
+    VTimer: Number,
     ShowTrue :Boolean,
-    TrueAnswerShow : String 
+    TrueAnswerShow : String
 })
 
 const Question = mongoose.model("Question" , Ques)
