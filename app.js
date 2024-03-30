@@ -105,7 +105,7 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     let Type = Req.body.Type
     let Timer = Req.body.Timer
     let TrueAnswerShow = Req.body.TrueAnswerShow 
-
+    let VTimer = Req.body.VTimer
     newQues._id = 1
     newQues.ShowTrue = false
     newQues.Ques = Quest
@@ -118,6 +118,7 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Type = Type
     newQues.Timer = Timer
     newQues.TrueAnswerShow = TrueAnswerShow
+    newQues.VTimer = VTimer
     await newQues.save()
 
 async function timed(){
