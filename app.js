@@ -11,8 +11,8 @@ mongoose.connect(DB_link)
 .catch((error) => {console.log("This an Error" + error)})
 
 
-let Datenow = Math.trunc( new Date().getTime() / 1000)
-
+let Datenow;
+let De;
 let nextTime ;
 
 
@@ -119,6 +119,7 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Timer = Timer
     newQues.TrueAnswerShow = TrueAnswerShow
     newQues.VTimer = VTimer
+    newQues.QStatus= true
     await newQues.save()
 
 async function timed(){
@@ -129,11 +130,11 @@ async function timed(){
     let Winners = [] ;
     let All;
     All = await  Users.find()
-if(Datenow < nextTime + 5){
+
+
     setInterval(()=>{
+if(Datenow < nextTime + 5){
 Datenow = Math.trunc( new Date().getTime() / 1000) ;
-
-
 if(Datenow == nextTime){
 const newQues3 = new Question()
 newQues3._id = 3;
@@ -154,9 +155,10 @@ if(Winners.length > 1){
     newQues3.save()
 
 }
-
-},1000)
 }
+},1000)
+
+
 
 }
 timed()
@@ -171,14 +173,10 @@ timed()
 app.delete("/reset" , async (Req , Res) =>{
 Quesfind = await Question.find()
 let QuesArr = []
-for(Quest of Quesfind){
-   QuesArr.push(Quest._id)
-}
-if(QuesArr.length > 2){
+for(Quest of Quesfind){QuesArr.push(Quest._id)}
+if(QuesArr.length > 1){
 await Question.findByIdAndDelete(3)
-}
 await Question.findByIdAndDelete(1)
-
 let Alluser = await Users.find()
 let Code = "";
 for (user of Alluser){
@@ -191,8 +189,16 @@ for (user of Alluser){
     textCorrect: "",
     })
 }
+Datenow = Datenow + 5000
+}
+
 Res.send("Deleted Successfully")
 })
+
+
+
+
+
 
 //Result
 

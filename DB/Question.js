@@ -14,7 +14,8 @@ let Ques = new Schema({
     Timer: Number,
     VTimer: Number,
     ShowTrue :Boolean,
-    TrueAnswerShow : String
+    TrueAnswerShow : String,
+    QStatus:Boolean,
 })
 
 const Question = mongoose.model("Question" , Ques)
