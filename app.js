@@ -32,8 +32,6 @@ let Status = Req.body.Status
 let LoginTime = Req.body.LoginTime
 let LogoutTime = Req.body.LogoutTime
 let Type = Req.body.Type
-let VTimer = Req.body.VTimer
-
 
 newUser._id = Code
 newUser.Name = Name
@@ -42,7 +40,6 @@ newUser.Status = Status
 newUser.LoginTime = LoginTime
 newUser.LogoutTime = LogoutTime
 newUser.Type = Type
-newUser.VTimer = VTimer
 
 await newUser.save()
 Res.send("The data Saved")
@@ -120,9 +117,10 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.TrueAnswerShow = TrueAnswerShow
     newQues.VTimer = VTimer
     newQues.QStatus= true
+    newQues.Winner = []
     await newQues.save()
 
-async function timed(){
+async ()=>{
     Datenow = Math.trunc( new Date().getTime() / 1000)
     let QuesFind = await Question.findById(1)
      nextTime = Datenow + QuesFind.Timer
@@ -131,14 +129,14 @@ async function timed(){
     let All;
     All = await  Users.find()
 
-
     setInterval(()=>{
-if(Datenow < nextTime + 5){
 Datenow = Math.trunc( new Date().getTime() / 1000) ;
+
+
 if(Datenow == nextTime){
-const newQues3 = new Question()
-newQues3._id = 3;
-newQues3.Ques = "Timeout"
+
+  async() =>{await Question.findByIdAndUpdate(1 , {QStatus : false})}
+
 
 for(user of All){
 if(QuesType == "Choose"){
@@ -148,26 +146,22 @@ if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , use
 
 if(Winners.length > 1){
         let i = Math.floor(Math.random() * Winners.length)
-        if(Winners.length == 0){newQues3.Winner = []}
-        else{newQues3.Winner = Winners[i]}
-        
-    }else{newQues3.Winner = Winners[0]}
-    newQues3.save()
+        if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
+        else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
+    }
 
 }
-}
+
 },1000)
 
 
-
 }
-timed()
-    Res.send("The Question Saved")
+
+Res.send("The Question Saved")
     
-    }else{
-        Res.send("The Password is Wrong!")
-    }
-    })
+}else{Res.send("The Password is Wrong!")}
+
+})
 
 // Reset
 app.delete("/reset" , async (Req , Res) =>{
@@ -175,7 +169,6 @@ Quesfind = await Question.find()
 let QuesArr = []
 for(Quest of Quesfind){QuesArr.push(Quest._id)}
 if(QuesArr.length > 1){
-await Question.findByIdAndDelete(3)
 await Question.findByIdAndDelete(1)
 let Alluser = await Users.find()
 let Code = "";
@@ -189,7 +182,6 @@ for (user of Alluser){
     textCorrect: "",
     })
 }
-Datenow = Datenow + 5000
 }
 
 Res.send("Deleted Successfully")
@@ -221,7 +213,7 @@ app.delete("/resetU" , async(Req , Res) =>{
 app.get("/Result" , async (Req , Res) =>{
 let Winners = [] 
 let Lossers = []
-let Wins ;
+let Wins = await Question.findById(1).Winner;
 let QuesAll = await Question.find()
 let Type;
 let TrueAnswerShow;
@@ -232,14 +224,16 @@ if(QuesAll.length == 1){
 else{
 let Allusers = await Users.find()
 let Quesfind = await Question.findById(1)
-let QuesWin = await Question.findById(3)
 TrueAnswerShow = Quesfind.TrueAnswerShow
- Type = Quesfind.Type
+Type = Quesfind.Type
 let ShowTrue = Quesfind.ShowTrue
+
+
 for(user of Allusers){   
 if(Quesfind.Type == "Choose"){
 if(user.Answer == Quesfind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
 else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
+
 
 }if(Quesfind.Type == "Text"){
     if(ShowTrue == true){
@@ -250,13 +244,15 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
 
 
 }
-if(QuesAll.length == 3){Wins= QuesWin.Winner}
 
 }
 
 
 Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 })
+
+
+
 
 
 
@@ -267,12 +263,13 @@ app.get("/Ques" , async(Req , Res) => {
 for(Quest of Quesfind){QuesArr.push(Quest.Ques)}
 
 if(QuesArr.length > 1){
+     let Ques1 = await Question.findById(1).QStatus
     Time = nextTime - Datenow
 }else{Time = null}
 
 
 
-Res.json({QuesArr , Time})
+Res.json({QuesArr , Time , Ques1})
 
 })
 
@@ -299,6 +296,7 @@ app.put("/Correct" , async (Req , Res) =>{
     let Winners = [];
     let i = 0
     let x;
+
 for(user of Allusers){
    if(Data[i][1] == "T"){
     x =await Users.findById(Data[i][0])
@@ -309,15 +307,10 @@ i++;
 }
     if(Winners.length > 1 ){
         let c = Math.floor(Math.random() * Winners.length)
-        if(Winners.length == 0){await Question.findByIdAndUpdate(3 , {Winner : []})}
-        else{
-            await Question.findByIdAndUpdate(3 , {Winner : Winners[c]}) ;
-        }
+        if(Winners.length == 0){await Question.findByIdAndUpdate(1 , {Winner : []})}
+        else{await Question.findByIdAndUpdate(1 , {Winner : Winners[c]}) ;}
     }
-    else{await Question.findByIdAndUpdate(3 , {Winner : Winners[0]})}
-
-     await Question.findByIdAndUpdate(1 , {ShowTrue : true})
-
+await Question.findById(1,{ShowTrue : true})
         Res.send("All is Corrected")
 })
 
