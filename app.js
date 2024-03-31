@@ -12,7 +12,6 @@ mongoose.connect(DB_link)
 
 
 let Datenow;
-let De;
 let nextTime ;
 
 
@@ -88,6 +87,39 @@ app.put("/Logout" , async (Req , Res) => {
 
 
 
+async function Timed(x){
+    Datenow = Math.trunc( new Date().getTime() / 1000) ;
+    let QuesFind = await Question.findById(1)
+    nextTime = Datenow + QuesFind.Timer
+    let QuesType = QuesFind.Type
+    let Winners = [] ;
+    let All;
+    All = await  Users.find()
+
+    setInterval(()=>{
+Datenow = Math.trunc( new Date().getTime() / 1000) ;
+if(x == true){
+if(Datenow == nextTime){
+async function G(){await Question.findByIdAndUpdate(1 , {QS : false}) }
+G()
+for(user of All){
+if(QuesType == "Choose"){
+if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
+}}
+
+if(Winners.length > 1){
+        let i = Math.floor(Math.random() * Winners.length)
+        if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
+        else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
+    }
+}
+
+}},1000)
+
+}
+
+
+
 //Q&A
 app.post("/Ques/:pass" , async(Req , Res) =>{
     if(Req.params.pass == "20212223"){
@@ -116,46 +148,10 @@ app.post("/Ques/:pass" , async(Req , Res) =>{
     newQues.Timer = Timer
     newQues.TrueAnswerShow = TrueAnswerShow
     newQues.VTimer = VTimer
-    newQues.QStatus= true
+    newQues.QS= true
     newQues.Winner = []
     await newQues.save()
-
-async ()=>{
-    Datenow = Math.trunc( new Date().getTime() / 1000)
-    let QuesFind = await Question.findById(1)
-     nextTime = Datenow + QuesFind.Timer
-    let QuesType = QuesFind.Type
-    let Winners = [] ;
-    let All;
-    All = await  Users.find()
-
-    setInterval(()=>{
-Datenow = Math.trunc( new Date().getTime() / 1000) ;
-
-
-if(Datenow == nextTime){
-
-  async() =>{await Question.findByIdAndUpdate(1 , {QStatus : false})}
-
-
-for(user of All){
-if(QuesType == "Choose"){
-if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
-}}
-
-
-if(Winners.length > 1){
-        let i = Math.floor(Math.random() * Winners.length)
-        if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
-        else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
-    }
-
-}
-
-},1000)
-
-
-}
+     Timed(true)
 
 Res.send("The Question Saved")
     
@@ -166,6 +162,7 @@ Res.send("The Question Saved")
 // Reset
 app.delete("/reset" , async (Req , Res) =>{
 Quesfind = await Question.find()
+Timed(false)
 let QuesArr = []
 for(Quest of Quesfind){QuesArr.push(Quest._id)}
 if(QuesArr.length > 1){
@@ -263,7 +260,7 @@ app.get("/Ques" , async(Req , Res) => {
 for(Quest of Quesfind){QuesArr.push(Quest.Ques)}
 
 if(QuesArr.length > 1){
-     let Ques1 = await Question.findById(1).QStatus
+     let Ques1 = await Question.findById(1).QS
     Time = nextTime - Datenow
 }else{Time = null}
 
