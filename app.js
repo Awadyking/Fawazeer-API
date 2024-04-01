@@ -11,7 +11,7 @@ mongoose.connect(DB_link)
 .catch((error) => {console.log("This an Error" + error)})
 
 
-let Datenow;
+let Datenow =  Math.trunc( new Date().getTime() / 1000) ;
 let nextTime ;
 
 
@@ -254,19 +254,12 @@ Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
 
 
 app.get("/Ques" , async(Req , Res) => {
- Quesfind = await Question.find()
- let QuesArr = []
- let Time ;
-for(Quest of Quesfind){QuesArr.push(Quest.Ques)}
-
-if(QuesArr.length > 1){
-     let Ques1 = await Question.findById(1).QS
-    Time = nextTime - Datenow
-}else{Time = null}
-
-
-
-Res.json({QuesArr , Time , Ques1})
+let Quesfind = await Question.find()
+let QuesArr=[]
+for(Quest of Quesfind){QuesArr.push(Quest)}
+let Time ;
+if(QuesArr.length > 1){Time = nextTime - Datenow;}
+Res.json({Time , QuesArr})
 
 })
 
