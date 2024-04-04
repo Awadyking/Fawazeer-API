@@ -91,6 +91,8 @@ app.put("/Logout" , async (Req , Res) => {
 async function Timed(x){
     Datenow = Math.trunc( new Date().getTime() / 1000) ;
     let QuesFind = await Question.findById(1)
+    let QuesAll = await Question.find()
+    let QuesAllArr = [];
     nextTime = Datenow + QuesFind.Timer
     let QuesType = QuesFind.Type
     let Winners = [] ;
@@ -104,16 +106,22 @@ async function G(){
     let AllU = await Users.find()
     for(User of AllU){
         if(QuesType == "Choose"){
-            if(User.Answer == QuesFind.True){Winners.push([])}
-        }
+            if(User.Answer == QuesFind.True){Winners.push([User.Name , User.LogoutTime , User.Answer])}
+            }
+    }
+
+    for(Ques of QuesAll){QuesAllArr.push(Ques)}
+
+    if(QuesAllArr.length > 1){
+    let i = Math.floor(Math.random() * Winners.length)
+    if(Winners.length == 0){async function R(){await Question.findByIdAndUpdate(1 , {Winner : []})}; R()}
+    else{async function H(){await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}; H()}
     }
 }
 G()
 
 
-        // let i = Math.floor(Math.random() * Winners.length)
-        // if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
-        // else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
+        
 }
 
 }},1000)
@@ -212,7 +220,6 @@ app.delete("/resetU" , async(Req , Res) =>{
 app.get("/Result" , async (Req , Res) =>{
 let Winners = [] 
 let Lossers = []
-let Wins = await Question.findById(1).Winner;
 let QuesAll = await Question.find()
 let Type;
 let TrueAnswerShow;
@@ -245,9 +252,9 @@ else{Lossers.push([user.Name , user.LogoutTime , user.LoginTime , user.Answer])}
 }
 
 }
+let WinsQ = await Question.findById(1);
 
-
-Res.json({Winners , Lossers , Wins , TrueAnswerShow , Type})
+Res.json({Winners , Lossers , TrueAnswerShow , Type , WinsQ})
 })
 
 
@@ -302,7 +309,8 @@ i++;
         if(Winners.length == 0){await Question.findByIdAndUpdate(1 , {Winner : []})}
         else{await Question.findByIdAndUpdate(1 , {Winner : Winners[c]}) ;}
     }
-await Question.findById(1,{ShowTrue : true})
+await Question.findByIdAndUpdate(1,{ShowTrue : true})
+
         Res.send("All is Corrected")
 })
 
