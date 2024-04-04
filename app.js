@@ -21,6 +21,7 @@ const Users = require("./DB/Users")
 const Question = require("./DB/Question")
 //Add Users
 
+
 app.post("/Users/:pass" , async(Req , Res) =>{
 if(Req.params.pass == "20212223"){
 const newUser = new Users()
@@ -93,28 +94,30 @@ async function Timed(x){
     nextTime = Datenow + QuesFind.Timer
     let QuesType = QuesFind.Type
     let Winners = [] ;
-    let All;
-    All = await  Users.find()
 
-    setInterval(()=>{
+setInterval(()=>{
 Datenow = Math.trunc( new Date().getTime() / 1000) ;
 if(x == true){
 if(Datenow == nextTime){
-async function G(){await Question.findByIdAndUpdate(1 , {QS : false}) }
-G()
-for(user of All){
-if(QuesType == "Choose"){
-if(user.Answer == QuesFind.True){Winners.push([user.Name , user.LogoutTime , user.Answer])}
-}}
-
-if(Winners.length > 1){
-        let i = Math.floor(Math.random() * Winners.length)
-        if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
-        else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
+async function G(){
+    await Question.findByIdAndUpdate(1 , {QS : false});
+    let AllU = await Users.find()
+    for(User of AllU){
+        if(QuesType == "Choose"){
+            if(User.Answer == QuesFind.True){Winners.push([])}
+        }
     }
+}
+G()
+
+
+        // let i = Math.floor(Math.random() * Winners.length)
+        // if(Winners.length == 0){async()=>{await Question.findByIdAndUpdate(1 , {Winner : []})}}
+        // else{async()=>{await Question.findByIdAndUpdate(1 , {Winner : Winners[i]})}}
 }
 
 }},1000)
+
 
 }
 
@@ -162,7 +165,6 @@ Res.send("The Question Saved")
 // Reset
 app.delete("/reset" , async (Req , Res) =>{
 Quesfind = await Question.find()
-Timed(false)
 let QuesArr = []
 for(Quest of Quesfind){QuesArr.push(Quest._id)}
 if(QuesArr.length > 1){
